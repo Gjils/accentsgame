@@ -1,10 +1,8 @@
 @keyframes fade-animation
   0%
-    opacity: .5
-    font-size: 40pt
+    font-size: 4vw
   100%
-    opacity: 1
-    font-size: 70pt
+    font-size: 6vw
 
 @keyframes disapear-animation
   0%
@@ -17,16 +15,16 @@
   100%
     opacity: 1
 @keyframes horizontal-shaking
- 0% 
-  transform: translateX(0)
- 25%
-  transform: translateX(5px)
- 50% 
-  transform: translateX(-5px)
- 75% 
-  transform: translateX(5px)
- 100% 
-  transform: translateX(0)
+  0%
+    transform: translateX(0)
+  25%
+    transform: translateX(5px)
+  50%
+    transform: translateX(-5px)
+  75%
+    transform: translateX(5px)
+  100%
+    transform: translateX(0)
 
 *
   box-sizing: border-box
@@ -70,14 +68,23 @@ body
   position: absolute
   top: 0
   right: 0
-  margin: 50px
-  .count
-    font-size: 30pt
-    text-align: right
+  width: 100%
+  margin: 0
+  padding: 50px
   .rate
-    font-size: 20pt
-    text-align: right
     color: #696969
+  @media screen and (orientation: landscape)
+    text-align: right
+    .count
+      font-size: 5vw
+    .rate
+      font-size: 3vw
+  @media screen and (orientation: portrait)
+    text-align: center
+    .count
+      font-size: 6vw
+    .rate
+      font-size: 4vw
 .disapear
   animation-name: disapear-animation
   animation-timing-function: ease-in-out
@@ -91,20 +98,25 @@ body
 .word
   position: relative
   cursor: default
-  font-size: 70pt
   display: flex
   align-items: flex-end
   animation-duration: .2s
+  width: 5
   .char
     user-select: none
-    min-width: 80px
     text-align: center
     animation-duration: .2s
-  .active.vow:hover
-    animation-name: fade-animation
-    animation-timing-function: ease
-    color: #77dd77
-    text-transform: uppercase
+    @media screen and (orientation: landscape)
+      font-size: 6vw
+      min-width: 5vw
+    @media screen and (orientation: portrait)
+      font-size: 7vw
+      min-width: 6vw
+      .active.vow:hover
+        animation-name: fade-animation
+        animation-timing-function: ease
+        color: #77dd77
+        text-transform: uppercase
   .active.cons:hover
     color: #696969
   .correct
