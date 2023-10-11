@@ -8,15 +8,15 @@ document.addEventListener("DOMContentLoaded", () => {
     shuffle(data)
     class Block {
       constructor(wordInfo, wordBlock) {
-        this.word = wordInfo.word
+        wordBlock.word = wordInfo.word
         wordBlock.correct = wordInfo.correct
-        this.context = wordInfo.context
+        wordBlock.context = wordInfo.context
       }
 
       buildBlock() {
         wordBlock.classList.add("word")
         wordBlock.classList.add("appear")
-        let wordArr = Array.from(this.word)
+        let wordArr = Array.from(wordBlock.word)
         wordBlock.makeInactive = function() {
           wordBlock.childNodes.forEach(i => {
             i.classList.remove("active")
@@ -38,16 +38,16 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         }
         wordBlock.correctChoice = function() {
-          this.makeInactive()
-          wordBlock.childNodes[this.correct].classList.add("correct")
+          wordBlock.makeInactive()
+          wordBlock.childNodes[wordBlock.correct].classList.add("correct")
           wordBlock.status = 0
           wordBlock.closeElem()
         }
         wordBlock.incorrectChoice = function(ind) {
           wordBlock.classList.remove("appear")
           wordBlock.classList.add("shaking")
-          this.makeInactive()
-          wordBlock.childNodes[this.correct].classList.add("correct")
+          wordBlock.makeInactive()
+          wordBlock.childNodes[wordBlock.correct].classList.add("correct")
           wordBlock.childNodes[ind].classList.add("incorrect")
           document.querySelector(".next").classList.remove("hidden")
           document.querySelector(".next").classList.add("appear")
@@ -57,16 +57,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         wordBlock.submit = function(event) {
           if (event.target.classList.contains("char") && (event.target.classList.contains("vow"))) {
-            wordBlock.removeEventListener("click", this.submit)
-            if (event.target.index === this.correct) {
-              this.correctChoice()
+            document.querySelector("body").removeEventListener("click", wordBlock.submit)
+            if (event.target.index === wordBlock.correct) {
+              wordBlock.correctChoice()
             }
             else {
-              this.incorrectChoice(event.target.index)
+              wordBlock.incorrectChoice(event.target.index)
             }
           }
         }
-        wordBlock.addEventListener("click", wordBlock.submit)
+        document.querySelector("body").addEventListener("click", wordBlock.submit)
         wordArr.forEach((i, n) => {
           let char = document.createElement("div")
           char.classList.add("char", "active")
@@ -80,10 +80,10 @@ document.addEventListener("DOMContentLoaded", () => {
           }
           wordBlock.append(char)
         });
-        if (this.context != "") {
+        if (wordBlock.context != "") {
           let contextElem = document.createElement("div")
           contextElem.classList.add("context")
-          contextElem.innerHTML = `(${this.context})`
+          contextElem.innerHTML = `(${wordBlock.context})`
           wordBlock.append(contextElem)
         }
       }

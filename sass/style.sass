@@ -33,6 +33,7 @@
 html
   margin: 0
   height: 100vh
+  overflow: hidden
 body
   background-color: #fefbf5
   margin: 0
@@ -112,11 +113,11 @@ body
     @media screen and (orientation: portrait)
       font-size: 7vw
       min-width: 6vw
-      .active.vow:hover
-        animation-name: fade-animation
-        animation-timing-function: ease
-        color: #77dd77
-        text-transform: uppercase
+  .active.vow:hover
+    animation-name: fade-animation
+    animation-timing-function: ease
+    color: #77dd77
+    text-transform: uppercase
   .active.cons:hover
     color: #696969
   .correct
