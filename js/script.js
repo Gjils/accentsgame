@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function shuffle(array) {
     array.sort(() => Math.random() - 0.5);
   }
-  fetch("../words.json")
+  fetch("words.json")
   .then(data => data.json())
   .then(data => {
     shuffle(data)
