@@ -1,6 +1,6 @@
-@keyframes fade-animation
+@keyframes increasee-font-size-animation
   0%
-    font-size: 4vw
+    font-size: 5vw
   100%
     font-size: 6vw
 
@@ -9,12 +9,19 @@
     opacity: 1
   100%
     opacity: 0
+.disapear
+  animation-name: disapear-animation
+  animation-timing-function: ease-in-out
+
 @keyframes appear-animation
   0%
     opacity: 0
   100%
     opacity: 1
-@keyframes horizontal-shaking
+.appear
+  animation-name: appear-animation
+  animation-timing-function: ease-in-out
+@keyframes horizontal-shaking-animation
   0%
     transform: translateX(0)
   25%
@@ -25,7 +32,10 @@
     transform: translateX(5px)
   100%
     transform: translateX(0)
-
+.shaking
+  animation-name: horizontal-shaking-animation
+  animation-timing-function: ease-in-out
+  animation-iteration-count: 1
 *
   box-sizing: border-box
   color: #293133
@@ -45,6 +55,7 @@ body
 .hidden
   display: none !important
 .next
+  border: none
   cursor: pointer
   user-select: none
   display: flex
@@ -73,59 +84,84 @@ body
   margin: 0
   padding: 50px
   .rate
+    animation-duration: .5s
     color: #696969
+    span
+      color: #696969
+  .streak
+    display: block
+    position: relative
+    color: #CC5500
+    font-weight: 900
+    animation-duration: .2s
+    img
+      position: relative
+      top: 3px
+      margin-right: 7px
+    span
+      color: #CC5500
   @media screen and (orientation: landscape)
     text-align: right
     .count
       font-size: 30pt
     .rate
       font-size: 25pt
+    .streak
+      font-size: 20pt
+      img
+        width: 30px
   @media screen and (orientation: portrait)
     text-align: center
     .count
       font-size: 20pt
     .rate
       font-size: 15pt
-.disapear
-  animation-name: disapear-animation
-  animation-timing-function: ease-in-out
-.appear
-  animation-name: appear-animation
-  animation-timing-function: ease-in-out
-.shaking
-  animation-name: horizontal-shaking
-  animation-timing-function: ease
-  animation-iteration-count: 1
+    .streak
+      font-size: 12pt
+      img
+        width: 20px
+
 .word
   position: relative
   cursor: default
   display: flex
   align-items: flex-end
   animation-duration: .2s
-  width: 5
-  .char
+  .letter
+    display: block
+    border: none
+    background-color: #fefbf5
+    padding: 0
     user-select: none
     text-align: center
-    animation-duration: .2s
+    animation-duration: .1s
     @media screen and (orientation: landscape)
       font-size: 6vw
       min-width: 5vw
     @media screen and (orientation: portrait)
       font-size: 7vw
       min-width: 6vw
+  .active.vow
+    cursor: pointer
   .active.vow:hover
-    animation-name: fade-animation
-    animation-timing-function: ease
+    animation-name: increasee-font-size-animation
+    animation-timing-function: ease-in-out
     color: #77dd77
     text-transform: uppercase
   .active.cons:hover
     color: #696969
   .correct
+    animation-name: increasee-font-size-animation
+    animation-timing-function: ease-in-out
     color: #77dd77
     text-transform: uppercase
   .incorrect
     color: #db5856
-    animation-name: appear-animation
-    animation-timing-function: ease
   .context
     color: #696969
+    @media screen and (orientation: landscape)
+      font-size: 6vw
+      min-width: 5vw
+    @media screen and (orientation: portrait)
+      font-size: 7vw
+      min-width: 6vw

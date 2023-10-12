@@ -1,121 +1,213 @@
 document.addEventListener("DOMContentLoaded", () => {
-  function shuffle(array) {
-    array.sort(() => Math.random() - 0.5);
-  }
-  fetch("words.json")
-  .then(data => data.json())
-  .then(data => {
-    shuffle(data)
-    class Block {
-      constructor(wordInfo, wordBlock) {
-        wordBlock.word = wordInfo.word
-        wordBlock.correct = wordInfo.correct
-        wordBlock.context = wordInfo.context
-      }
+	function shuffle(array) {
+		array.sort(() => Math.random() - 0.5);
+	}
+	fetch("words.json")
+		.then((words) => words.json())
+		.then((words) => {
+			// Перемешиваю массив слов
+			shuffle(words);
+			// Выбираю элементы с которыми буду работать
+			const wordBlock = document.querySelector(".word");
+			const bodyBlock = document.querySelector("body");
+			const nextButton = document.querySelector(".next");
+			const infoBlock = document.querySelector(".info");
 
-      buildBlock() {
-        wordBlock.classList.add("word")
-        wordBlock.classList.add("appear")
-        let wordArr = Array.from(wordBlock.word)
-        wordBlock.makeInactive = function() {
-          wordBlock.childNodes.forEach(i => {
-            i.classList.remove("active")
-          })
-        wordBlock.closeElem = function() {
-          document.querySelector(".next").removeEventListener
-          ("click", wordBlock.closeElem)
-          wordBlock.classList.remove("shaking")
-          wordBlock.classList.remove("appear")
-          wordBlock.classList.add("disapear")
-          document.querySelector(".next").classList.remove("appear")
-          document.querySelector(".next").classList.add("disapear")
-          setTimeout(() => {
-            wordBlock.innerHTML = ""
-            wordBlock.classList.remove("disapear")
-            document.querySelector(".next").classList.remove("disappear")
-            document.querySelector(".next").classList.add("hidden")
-          }, 190)
-          }
-        }
-        wordBlock.correctChoice = function() {
-          wordBlock.makeInactive()
-          wordBlock.childNodes[wordBlock.correct].classList.add("correct")
-          wordBlock.status = 0
-          wordBlock.closeElem()
-        }
-        wordBlock.incorrectChoice = function(ind) {
-          wordBlock.classList.remove("appear")
-          wordBlock.classList.add("shaking")
-          wordBlock.makeInactive()
-          wordBlock.childNodes[wordBlock.correct].classList.add("correct")
-          wordBlock.childNodes[ind].classList.add("incorrect")
-          document.querySelector(".next").classList.remove("hidden")
-          document.querySelector(".next").classList.add("appear")
-          document.querySelector(".next").addEventListener
-          ("click", wordBlock.closeElem)
-          wordBlock.status = 1
-        }
-        wordBlock.submit = function(event) {
-          if (event.target.classList.contains("char") && (event.target.classList.contains("vow"))) {
-            document.querySelector("body").removeEventListener("click", wordBlock.submit)
-            if (event.target.index === wordBlock.correct) {
-              wordBlock.correctChoice()
-            }
-            else {
-              wordBlock.incorrectChoice(event.target.index)
-            }
-          }
-        }
-        document.querySelector("body").addEventListener("click", wordBlock.submit)
-        wordArr.forEach((i, n) => {
-          let char = document.createElement("div")
-          char.classList.add("char", "active")
-          char.index = n
-          char.innerHTML = i
-          if ("бвгджзйклмнпрстфхцчшщ".includes(i)) {
-            char.classList.add("cons")
-          }
-          if ("аеёиоуыэюя".includes(i)) {
-            char.classList.add("vow")
-          }
-          wordBlock.append(char)
-        });
-        if (wordBlock.context != "") {
-          let contextElem = document.createElement("div")
-          contextElem.classList.add("context")
-          contextElem.innerHTML = `(${wordBlock.context})`
-          wordBlock.append(contextElem)
-        }
-      }
+			// Создаю счетчик ответов с замыканием
+			function createCounter() {
+				let correct = 0,
+					common = 0,
+					streak = 0;
+				// Функция, обновляющая счет при верном ответе
+				function addRight() {
+					correct += 1;
+					common += 1;
+					streak += 1;
 
-      
-    }
-    const wordBlock = document.querySelector(".word")
-    let right = 0
-    let common = 0
-    new Block(data[0], wordBlock).buildBlock()
-    document.querySelector(".info").innerHTML = `
-    <div class="count">${right}/${common}</div>
-    <div class="rate">${Math.floor((right / 1)*100)}%</div>`
-    let observeChildNodes = new MutationObserver(() => {
-      if (wordBlock.innerHTML != "") {
-        return
-      }
-      if (wordBlock.status == 0) {
-        data.push(data[0])
-        data.shift()
-        right += 1
-        common += 1
-      }
-      else if (wordBlock.status == 1) {
-        data.splice(15, 0, data[0])
-        data.shift()
-        common += 1
-      }
-      document.querySelector(".info").innerHTML = `
-        <div class="count">${right}/${common}</div>
-        <div class="rate">${Math.floor((right / common)*100)}%</div>`
-      new Block(data[0], wordBlock).buildBlock()});
-    observeChildNodes.observe(wordBlock, {childList: true})
-  })
-})
+					// Меняю счет с анимациями
+					correctBlock = this.querySelector(".count-correct");
+					correctBlock.innerHTML = `${correct}`;
+
+					commonBlock = this.querySelector(".count-common");
+					commonBlock.innerHTML = `${common}`;
+
+					rateBlock = this.querySelector(".rate-count");
+					rateBlock.innerHTML = `${Math.floor((correct / common) * 100)}`;
+
+					// Обновляю или показываю серию
+					if (streak >= 3) {
+						streakCountBlock = this.querySelector(".streak-count");
+						streakBlock = this.querySelector(".streak");
+
+						streakCountBlock.innerHTML = `${streak}`;
+
+						streakBlock.classList.remove("hidden");
+						streakBlock.classList.add("appear");
+					}
+				}
+				// Функция, обновляющая счет при неверном ответе
+				function addWrong() {
+					common += 1;
+					streak = 0;
+
+					// Меняю счет с анимациями
+					commonBlock = this.querySelector(".count-common");
+					commonBlock.innerHTML = `${common}`;
+
+					rateBlock = this.querySelector(".rate-count");
+					rateBlock.innerHTML = `${Math.floor((correct / common) * 100)}`;
+
+					// Скрываю серию
+					streakCountBlock = this.querySelector(".streak-count");
+					streakBlock = this.querySelector(".streak");
+
+					streakCountBlock.innerHTML = `${streak}`;
+
+					streakBlock.classList.add("shaking");
+					setTimeout(() => {
+						streakBlock.classList.remove("shaking");
+						streakBlock.classList.add("hidden");
+					}, 300);
+				}
+				return [addRight, addWrong];
+			}
+
+			// Дестуктуризирую массив с функциями полученный функции создания счетчиков и записываю данные из него в методы блока с информацией
+			[infoBlock.addRight, infoBlock.addWrong] = createCounter();
+
+			// Функция срабатывающая при нажатии на букву
+			wordBlock.submit = function (event) {
+				// Проверяю что нажата именно буква и она гласная
+				if (event.target.classList.contains("vow")) {
+					// Если буква выбрана верно
+					if (event.target.index === wordBlock.wordInfo.correct) {
+						wordBlock.correctChoice();
+						// Если буква выбрана неверно
+					} else {
+						wordBlock.incorrectChoice(event.target.index);
+					}
+				}
+			};
+
+			// Функция очищающая блок для того чтобы загрузить следующее слово
+			wordBlock.clearBlock = function () {
+				// Отключаю возможность нажимать кнопку во время анимации исчезновения (защита от множественных кликов)
+				nextButton.setAttribute("disabled", "");
+				// Удаляю остаточные классы с элементов
+				wordBlock.classList.remove("shaking");
+				wordBlock.classList.remove("appear");
+				nextButton.classList.remove("appear");
+				// Добавляю классы анимации исчезновения
+				wordBlock.classList.add("disapear");
+				nextButton.classList.add("disapear");
+				// Послностью очищаю блок со словом, скрываю кнопку, а также удаляю классы анимации исчезновения после выполнения анимации
+				setTimeout(() => {
+					wordBlock.innerHTML = "";
+					nextButton.classList.add("hidden");
+					nextButton.removeAttribute("disabled");
+					wordBlock.classList.remove("disappear");
+					nextButton.classList.remove("disappear");
+				}, 160);
+			};
+
+			// Вешаю обработчик событий на кнопку, которая будет переключать слова
+			nextButton.addEventListener("click", wordBlock.clearBlock);
+			// Вешаю обработчик событий, который будет отслеживать нажатия на буквы
+			bodyBlock.addEventListener("click", wordBlock.submit);
+
+			// Функция, которая строит слово в блоке
+			wordBlock.buildBlock = function (wordInfo) {
+				// Создаю внутри блока объект, который содержит информацию о слове
+				this.wordInfo = wordInfo;
+				// Размещаю буквы в блоке, помечаю их как гласные и согласные
+				let wordArr = Array.from(this.wordInfo.word);
+				wordArr.forEach((letter, i) => {
+					let letterBlock = document.createElement("button");
+					letterBlock.classList.add("letter", "active");
+					letterBlock.index = i;
+					letterBlock.innerHTML = letter;
+					if ("бвгджзйклмнпрстфхцчшщ".includes(letter)) {
+						letterBlock.classList.add("cons");
+					}
+					if ("аеёиоуыэюя".includes(letter)) {
+						letterBlock.classList.add("vow");
+					}
+					this.append(letterBlock);
+				});
+				// Добавляю контекст (если он есть)
+				if (this.wordInfo.context != "") {
+					let contextElem = document.createElement("div");
+					contextElem.classList.add("context");
+					contextElem.innerHTML = `(${wordBlock.wordInfo.context})`;
+					wordBlock.append(contextElem);
+				}
+				// Добавляю класс анимации появления
+				wordBlock.classList.add("appear");
+			};
+
+			// Функция отключаящая анимации при наведении и возможность выбора ответа после выбора ответа
+			wordBlock.makeInactive = function () {
+				this.childNodes.forEach((letter) => {
+					letter.classList.remove("active");
+					letter.setAttribute("disabled", "");
+				});
+			};
+
+			// Функция помечающая верную букву и удаляющая слово, если буква выбрана верно
+			wordBlock.correctChoice = function () {
+				this.makeInactive();
+				this.childNodes[this.wordInfo.correct].classList.add("correct");
+				// Даю понять счетчику, что слово введено верно (костыль)
+				this.status = 0;
+				// Обновляю счет
+				infoBlock.addRight();
+
+				// Запускаю очистку блока
+				this.clearBlock();
+			};
+
+			// Функция помечающая верную и неврную букву, а такжже показывающая кнопку для переключения слова, если буква выбрана неверно
+			wordBlock.incorrectChoice = function (chosenIndex) {
+				this.makeInactive();
+				// Удаляю прошлый класс анимации
+				this.classList.remove("appear");
+				// Добавляю анимацияю тряски
+				this.classList.add("shaking");
+				// Помечаю верную букву
+				this.childNodes[this.wordInfo.correct].classList.add("correct");
+				// Помечаю неверную букву
+				this.childNodes[chosenIndex].classList.add("incorrect", "appear");
+				// Показываю кнопку
+				nextButton.classList.remove("hidden");
+				nextButton.classList.add("appear");
+				// Даю понять счетчику, что слово введено неверно (костыль)
+				this.status = 1;
+				// Обновляю счет
+				infoBlock.addWrong();
+			};
+
+			// Строю первое слово
+			wordBlock.buildBlock(words[0]);
+
+			// Функция наблюдатель, сменяющая слово в массиве
+			const childNodesObserver = new MutationObserver(() => {
+				// Проверяю что выбран верный случай
+				if (wordBlock.innerHTML != "") {
+					return;
+				}
+				// Если выбана верная буква
+				if (wordBlock.status == 0) {
+					// Выкидываю элемент из начала массива и добавляю в конец (список подходит для моих целей лучше, но мне лень)
+					words.push(words[0]);
+					words.shift();
+				} else if (wordBlock.status == 1) {
+					// Выкидываю элемент из начала массива и на 15 позицию
+					words.splice(15, 0, words[0]);
+					words.shift();
+				}
+				wordBlock.buildBlock(words[0]);
+			});
+			// Говорю наблюдателю наблюдать за изменением блока со словом
+			childNodesObserver.observe(wordBlock, { childList: true });
+		});
+});

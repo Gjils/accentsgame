@@ -20,12 +20,18 @@
 			src="https://kit.fontawesome.com/b0de6a042c.js"
 			crossorigin="anonymous"
 		></script>
-    <link rel="icon" href="logo.svg">
+		<link rel="icon" href="logo.svg" />
 	</head>
 	<body>
 		<div class="word"></div>
-		<div class="info"></div>
-		<div class="next hidden">Продолжить <i class="fa-solid fa-arrow-right"></i></div>
+		<div class="info">
+			<div class="count"><span class="count-correct">0</span>/<span class="count-common">0</span></div>
+			<div class="rate"><span class="rate-count">0</span>%</div>
+			<div class="streak hidden"><img src="fire.gif">Серия из <span class="streak-count">0</span>!</div>
+		</div>
+		<button class="next hidden">
+			Продолжить <i class="fa-solid fa-arrow-right"></i>
+		</button>
 		<script src="js/script.js"></script>
 	</body>
 </html>
