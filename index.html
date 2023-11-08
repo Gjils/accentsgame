@@ -21,13 +21,62 @@
 			crossorigin="anonymous"
 		></script>
 		<link rel="icon" href="logo.svg" />
+		<!-- Yandex.Metrika counter -->
+		<script type="text/javascript">
+			(function (m, e, t, r, i, k, a) {
+				m[i] =
+					m[i] ||
+					function () {
+						(m[i].a = m[i].a || []).push(arguments);
+					};
+				m[i].l = 1 * new Date();
+				for (var j = 0; j < document.scripts.length; j++) {
+					if (document.scripts[j].src === r) {
+						return;
+					}
+				}
+				(k = e.createElement(t)),
+					(a = e.getElementsByTagName(t)[0]),
+					(k.async = 1),
+					(k.src = r),
+					a.parentNode.insertBefore(k, a);
+			})(
+				window,
+				document,
+				"script",
+				"https://mc.yandex.ru/metrika/tag.js",
+				"ym",
+			);
+
+			ym(95511584, "init", {
+				clickmap: true,
+				trackLinks: true,
+				accurateTrackBounce: true,
+			});
+		</script>
+		<noscript
+			><div>
+				<img
+					src="https://mc.yandex.ru/watch/95511584"
+					style="position: absolute; left: -9999px"
+					alt=""
+				/></div
+		></noscript>
+		<!-- /Yandex.Metrika counter -->
 	</head>
 	<body>
 		<div class="word"></div>
+		<!-- <div class="countdown">
+			<div class="line countdown5s"></div>
+		</div> -->
 		<div class="info">
-			<div class="count"><span class="count-correct">0</span>/<span class="count-common">0</span></div>
+			<div class="count">
+				<span class="count-correct">0</span>/<span class="count-common">0</span>
+			</div>
 			<div class="rate"><span class="rate-count">0</span>%</div>
-			<div class="streak hidden"><img src="fire.gif">Серия из <span class="streak-count">0</span>!</div>
+			<div class="streak hidden">
+				<img src="fire.gif" />Серия из <span class="streak-count">0</span>!
+			</div>
 		</div>
 		<button class="next hidden">
 			Продолжить <i class="fa-solid fa-arrow-right"></i>

@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			const bodyBlock = document.querySelector("body");
 			const nextButton = document.querySelector(".next");
 			const infoBlock = document.querySelector(".info");
+			// const countdownBlock = document.querySelector(".countdown")
 
 			// Создаю счетчик ответов с замыканием
 			function createCounter() {
@@ -72,6 +73,11 @@ document.addEventListener("DOMContentLoaded", () => {
 				return [addRight, addWrong];
 			}
 
+			// wordBlock.startCountdown = function() {
+			// 	if (wordBlock.countdown) {
+			// 		setTimeout("")
+			// 	} 
+			// }
 			// Дестуктуризирую массив с функциями полученный функции создания счетчиков и записываю данные из него в методы блока с информацией
 			[infoBlock.addRight, infoBlock.addWrong] = createCounter();
 
